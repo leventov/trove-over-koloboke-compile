@@ -21,7 +21,6 @@
 package gnu.trove.impl.hash;
 
 import gnu.trove.impl.Constants;
-import gnu.trove.impl.HashFunctions;
 import gnu.trove.impl.PrimeFinder;
 
 import java.io.Externalizable;
@@ -116,27 +115,52 @@ abstract public class THash implements Externalizable {
         this( initialCapacity, DEFAULT_LOAD_FACTOR );
     }
 
-
     /**
      * Creates a new <code>THash</code> instance with a prime capacity
      * at or near the minimum needed to hold <tt>initialCapacity</tt>
      * elements with load factor <tt>loadFactor</tt> without triggering
      * a rehash.
      *
-     * @param initialCapacity an <code>int</code> value
-     * @param loadFactor      a <code>float</code> value
+     * @param initialCapacity a positive <code>int</code> value
+     * @param loadFactor      a positive <code>float</code>
      */
     public THash( int initialCapacity, float loadFactor ) {
         super();
+        if ( initialCapacity < 0 ) {
+            throw new IllegalArgumentException( "negative capacity: " + initialCapacity );
+        } else if ( 0.0f >= loadFactor ) {
+            throw new IllegalArgumentException( "load factor out of range: " + loadFactor );
+        }
         _loadFactor = loadFactor;
 
         // Through testing, the load factor (especially the default load factor) has been
         // found to be a pretty good starting auto-compaction factor.
         _autoCompactionFactor = loadFactor;
 
-        setUp( HashFunctions.fastCeil( initialCapacity / loadFactor ) );
+        // Floats have 24 significand bits, causing loss of precision for initial capacities > ~17 million
+        setUp( saturatedCast( fastCeil( initialCapacity / (double) loadFactor ) ) );
     }
 
+    /*
+     * In profiling, it has been found to be faster to have our own local implementation
+     * of "ceil" rather than to call to {@link Math#ceil(double)}.
+     *
+     * precondition: v > 0
+     */
+    protected static long fastCeil( double v ) {
+        long possible_result = ( long ) v;
+        if ( v - possible_result > 0 ) possible_result++;
+        return possible_result;
+    }
+
+    /* precondition: v > 0 */
+    protected static int saturatedCast(long v) {
+        int r = (int) (v & 0x7fffffff); // removing sign bit
+        if (r != v) {
+            return Integer.MAX_VALUE;
+        }
+        return r;
+    }
 
     /**
      * Tells whether this set is currently holding any elements.
@@ -172,8 +196,8 @@ abstract public class THash implements Externalizable {
      */
     public void ensureCapacity( int desiredCapacity ) {
         if ( desiredCapacity > ( _maxSize - size() ) ) {
-			rehash( PrimeFinder.nextPrime( Math.max( size() + 1,
-				HashFunctions.fastCeil( ( desiredCapacity + size() ) / _loadFactor ) + 1 ) ) );
+            rehash( PrimeFinder.nextPrime(Math.max( _size + 1,
+               saturatedCast( fastCeil( ( desiredCapacity + _size ) / (double) _loadFactor) + 1 ) ) ) );
             computeMaxSize( capacity() );
         }
     }
@@ -199,7 +223,7 @@ abstract public class THash implements Externalizable {
     public void compact() {
         // need at least one free spot for open addressing
         rehash( PrimeFinder.nextPrime( Math.max( _size + 1,
-	        HashFunctions.fastCeil( size() / _loadFactor ) + 1 ) ) );
+	        saturatedCast( fastCeil( _size / (double) _loadFactor ) + 1 ) ) ) );
         computeMaxSize( capacity() );
 
         // If auto-compaction is enabled, re-determine the compaction interval
@@ -416,14 +440,14 @@ abstract public class THash implements Externalizable {
 
         // LOAD FACTOR
         float old_factor = _loadFactor;
-        _loadFactor = in.readFloat();
+        _loadFactor = Math.abs( in.readFloat() );
 
         // AUTO COMPACTION LOAD FACTOR
         _autoCompactionFactor = in.readFloat();
 
         // If we change the laod factor from the default, re-setup
         if ( old_factor != _loadFactor ) {
-            setUp( (int) Math.ceil( DEFAULT_CAPACITY / _loadFactor ) );
+            setUp( saturatedCast((long) Math.ceil(DEFAULT_CAPACITY / (double) _loadFactor)) );
         }
     }
 }// THash

@@ -76,6 +76,11 @@ public class THashSetTest extends TestCase {
         assertTrue( "set not equal: " + set + ", " + copy, set.equals( another ) );
     }
 
+    // x'd out because we don't usually run tests with > 4gb heaps
+    public void xxtestLargeCapacity() throws Exception {
+        THashSet<String> large = new THashSet<String>(Integer.MAX_VALUE);
+        assertTrue( "capacity was not respected", large.capacity() > 3 );
+    }
 
     public void testIsEmpty() throws Exception {
         Set<String> s = new THashSet<String>();

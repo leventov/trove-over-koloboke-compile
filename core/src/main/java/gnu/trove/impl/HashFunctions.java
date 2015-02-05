@@ -72,14 +72,4 @@ public final class HashFunctions {
         return object==null ? 0 : object.hashCode();
     }
 
-
-    /**
-     * In profiling, it has been found to be faster to have our own local implementation
-     * of "ceil" rather than to call to {@link Math#ceil(double)}.
-     */
-    public static int fastCeil( float v ) {
-        int possible_result = ( int ) v;
-        if ( v - possible_result > 0 ) possible_result++;
-        return possible_result;
-    }
 }

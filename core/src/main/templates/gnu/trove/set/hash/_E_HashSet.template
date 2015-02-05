@@ -132,7 +132,7 @@ public class T#E#HashSet extends T#E#Hash implements T#E#Set, Externalizable {
             if ( this.no_entry_value != ( #e# ) 0 ) {
                 Arrays.fill( _set, this.no_entry_value );
             }
-            setUp( (int) Math.ceil( DEFAULT_CAPACITY / _loadFactor ) );
+            setUp( saturatedCast( fastCeil( DEFAULT_CAPACITY / (double) _loadFactor ) ) );
         }
         addAll( collection );
     }
