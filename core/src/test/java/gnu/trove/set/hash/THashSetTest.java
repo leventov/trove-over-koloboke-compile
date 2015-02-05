@@ -21,6 +21,7 @@
 
 package gnu.trove.set.hash;
 
+import gnu.trove.impl.PrimeFinder;
 import junit.framework.TestCase;
 
 import java.io.ByteArrayInputStream;
@@ -80,6 +81,22 @@ public class THashSetTest extends TestCase {
     public void xxtestLargeCapacity() throws Exception {
         THashSet<String> large = new THashSet<String>(Integer.MAX_VALUE);
         assertTrue( "capacity was not respected", large.capacity() > 3 );
+    }
+
+    public void xxtestMaxHashSetCapacity() throws Exception {
+        TIntHashSet full = new TIntHashSet( Integer.MAX_VALUE, 0.5f );
+        assertEquals( PrimeFinder.nextPrime( Integer.MAX_VALUE ), full.capacity() );
+
+        int i;
+        for (i = 0; full.size() < full.capacity() - 1; i++) {
+            full.add(i);
+        }
+
+        try {
+            full.add(++i);
+            fail( "should have failed to add last key" );
+        } catch (IllegalStateException ignored) {
+        }
     }
 
     public void testIsEmpty() throws Exception {

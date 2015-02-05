@@ -198,6 +198,9 @@ abstract public class THash implements Externalizable {
         if ( desiredCapacity > ( _maxSize - size() ) ) {
             rehash( PrimeFinder.nextPrime(Math.max( _size + 1,
                saturatedCast( fastCeil( ( desiredCapacity + _size ) / (double) _loadFactor) + 1 ) ) ) );
+            if ( capacity() >= PrimeFinder.largestPrime ) {
+                _loadFactor = 1.0f;
+            }
             computeMaxSize( capacity() );
         }
     }
@@ -317,6 +320,9 @@ abstract public class THash implements Externalizable {
         int capacity;
 
         capacity = PrimeFinder.nextPrime( initialCapacity );
+        if ( capacity >= PrimeFinder.largestPrime ) {
+            _loadFactor = 1.0f;
+        }
         computeMaxSize( capacity );
         computeNextAutoCompactionAmount( initialCapacity );
 
