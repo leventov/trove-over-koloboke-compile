@@ -37,9 +37,17 @@ import java.util.Arrays;
 public final class PrimeFinder {
     /**
      * The largest prime this class can generate; currently equal to
-     * <tt>Integer.MAX_VALUE</tt>.
+     * <tt>2,004,663,929/tt>.
+     *
+     * While Integer.MAX_VALUE is in fact the largest representable
+     * prime in the integer space, consumers of this class are
+     * intended to create arrays of size returned from
+     * {@link #nextPrime}. Since the VM needs to reserve a few bytes
+     * for internal overhead, new int[Integer.MAX_VALUE] fails with
+     * an "exceeds VM limits" exception. So, we pick the second-largest
+     * prime as the practical largest.
      */
-    public static final int largestPrime = Integer.MAX_VALUE; //yes, it is prime.
+    public static final int largestPrime;
 
     /**
      * The prime number list consists of 11 chunks.
@@ -79,9 +87,6 @@ public final class PrimeFinder {
      */
 
     private static final int[] primeCapacities = {
-        //chunk #0
-        largestPrime,
-
         //chunk #1
         5,11,23,47,97,197,397,797,1597,3203,6421,12853,25717,51437,102877,205759,
         411527,823117,1646237,3292489,6584983,13169977,26339969,52679969,105359939,
@@ -136,6 +141,7 @@ public final class PrimeFinder {
         // To find numbers fast, we sort them once and for all.
 
         Arrays.sort(primeCapacities);
+        largestPrime = primeCapacities[primeCapacities.length - 1];
     }
 
     /**
@@ -146,7 +152,10 @@ public final class PrimeFinder {
      * @param desiredCapacity the capacity desired by the user.
      * @return the capacity which should be used for a hashtable.
      */
-    public static final int nextPrime(int desiredCapacity) {
+    public static int nextPrime(int desiredCapacity) {
+        if (desiredCapacity >= largestPrime) {
+            return largestPrime;
+        }
         int i = Arrays.binarySearch(primeCapacities, desiredCapacity);
         if (i<0) {
             // desired capacity not found, choose next prime greater

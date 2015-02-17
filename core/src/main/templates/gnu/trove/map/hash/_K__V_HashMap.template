@@ -132,7 +132,7 @@ public class T#K##V#HashMap extends T#K##V#Hash implements T#K##V#Map, Externali
         super( map.size() );
         if ( map instanceof T#K##V#HashMap ) {
             T#K##V#HashMap hashmap = ( T#K##V#HashMap ) map;
-            this._loadFactor = hashmap._loadFactor;
+            this._loadFactor = Math.abs( hashmap._loadFactor );
             this.no_entry_key = hashmap.no_entry_key;
             this.no_entry_value = hashmap.no_entry_value;
             //noinspection RedundantCast
@@ -143,7 +143,7 @@ public class T#K##V#HashMap extends T#K##V#Hash implements T#K##V#Map, Externali
             if ( this.no_entry_value != ( #v# ) 0 ) {
                 Arrays.fill( _values, this.no_entry_value );
             }
-            setUp( (int) Math.ceil( DEFAULT_CAPACITY / _loadFactor ) );
+            setUp( saturatedCast( fastCeil( DEFAULT_CAPACITY / (double) _loadFactor ) ) );
         }
         putAll( map );
     }

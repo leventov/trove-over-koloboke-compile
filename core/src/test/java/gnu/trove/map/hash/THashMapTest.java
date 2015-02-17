@@ -22,9 +22,11 @@ package gnu.trove.map.hash;
 
 import gnu.trove.function.TObjectFunction;
 import gnu.trove.impl.hash.HashTestKit;
+import gnu.trove.impl.hash.TByteByteHash;
 import gnu.trove.impl.hash.TObjectHash;
 import gnu.trove.procedure.TObjectObjectProcedure;
 import gnu.trove.procedure.TObjectProcedure;
+import gnu.trove.set.hash.THashSet;
 import gnu.trove.set.hash.THashSetTest;
 import junit.framework.TestCase;
 
@@ -112,6 +114,11 @@ public class THashMapTest extends TestCase {
 
     }
 
+    // x'd out because we don't usually run tests with > 4gb heaps
+    public void xxtestLargeCapacity() throws Exception {
+        TByteByteHash large = new TByteByteHashMap(Integer.MAX_VALUE);
+        assertTrue( "capacity was not respected", large.capacity() > 3 );
+    }
 
     public void testEquals() {
         String[] keys = {"Key1", "Key2", "Key3", "Key4", "Key5"};

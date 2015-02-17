@@ -42,4 +42,9 @@ public class PrimeFinderTest extends TestCase  {
         int r = PrimeFinder.nextPrime(999999);
         assertEquals(1070981,r);
     }
+
+    public void testMaxValue() throws Exception {
+        int r = PrimeFinder.nextPrime(Integer.MAX_VALUE);
+        assertEquals(2004663929, r);
+    }
 } // PrimeFinderTests

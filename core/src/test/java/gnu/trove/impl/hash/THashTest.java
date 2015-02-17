@@ -1,5 +1,7 @@
 package gnu.trove.impl.hash;
 
+import gnu.trove.impl.PrimeFinder;
+import gnu.trove.set.hash.TByteHashSet;
 import junit.framework.TestCase;
 import gnu.trove.set.hash.THashSet;
 import gnu.trove.map.hash.THashMap;
@@ -58,8 +60,20 @@ public class THashTest extends TestCase {
         assertTrue( set._maxSize > 12 );
     }
 
+    public void testNegativeCapacity() throws Exception {
+        try {
+            new THashSet<Integer>(-1);
+            fail( "expected an illegal argument exception" );
+        } catch ( IllegalArgumentException ignored ) {
+        }
+    }
 
+    public void testLargeCapacity() {
+        final int twentyFourBitPrime = PrimeFinder.nextPrime( 1 << 24 );
+        TByteHashSet set = new TByteHashSet( twentyFourBitPrime + 1, 1.0f );
 
+        assertTrue( "capacity was not large enough to hold desired elements" , set.capacity() > twentyFourBitPrime );
+    }
 
     public void testReusesRemovedSlotsOnCollision() {
         THashSet<Object> set = new THashSet<Object>( 11, 0.5f );
