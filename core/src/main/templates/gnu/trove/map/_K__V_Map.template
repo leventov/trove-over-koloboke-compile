@@ -276,11 +276,11 @@ public interface T#K##V#Map {
 
     /**
      * Adjusts the primitive value mapped to the key if the key is present in the map.
-     * Otherwise, the <tt>initial_value</tt> is put in the map.
+     * Otherwise, the <tt>put_amount</tt> is put in the map.
      *
      * @param key the key of the value to increment
      * @param adjust_amount the amount to adjust the value by
-     * @param put_amount the value put into the map if the key is not initial present
+     * @param put_amount the value put into the map if the key is not present
      *
      * @return the value present in the map after the adjustment or put operation
      */
