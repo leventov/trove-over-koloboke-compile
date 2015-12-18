@@ -865,17 +865,16 @@ public class T#K##V#HashMap extends T#K##V#Hash implements T#K##V#Map, Externali
         /** {@inheritDoc} */
         public boolean remove( #v# entry ) {
             #v#[] values = _values;
-            #k#[] set = _set;
+            byte[] states = _states;
 
             for ( int i = values.length; i-- > 0; ) {
-                if ( ( set[i] != FREE && set[i] != REMOVED ) && entry == values[i] ) {
+                if ( ( states[i] != FREE && states[i] != REMOVED ) && entry == values[i] ) {
                     removeAt( i );
                     return true;
                 }
             }
             return false;
         }
-
 
         /** {@inheritDoc} */
         public boolean containsAll( Collection<?> collection ) {
