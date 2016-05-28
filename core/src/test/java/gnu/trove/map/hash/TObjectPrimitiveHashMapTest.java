@@ -39,6 +39,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.*;
 
+import static gnu.trove.map.hash.TKolobokeObjectIntHashMap.withExpectedSize;
+import static gnu.trove.map.hash.TKolobokeObjectIntHashMap.withExpectedSizeAndNoEntryValue;
 
 
 /**
@@ -56,36 +58,32 @@ public class TObjectPrimitiveHashMapTest extends TestCase {
         String[] keys = new String[element_count];
         int[] vals = new int[element_count];
 
-        TObjectIntMap<String> map = new TObjectIntHashMap<String>();
+        TObjectIntMap<String> map = withExpectedSize(10);
         for ( int i = 0; i < element_count; i++ ) {
             keys[i] = Integer.toString( i + 1 );
             vals[i] = i + 1;
             map.put( keys[i], vals[i] );
         }
 
-        TObjectIntHashMap<String> capacity =
-                new TObjectIntHashMap<String>( 20 );
+        TObjectIntMap<String> capacity = withExpectedSize(20);
         for ( int i = 0; i < element_count; i++ ) {
             capacity.put( keys[i], vals[i] );
         }
         assertEquals( map, capacity );
 
-        TObjectIntHashMap<String> cap_and_factor =
-                new TObjectIntHashMap<String>( 20, 0.75f );
+        TObjectIntMap<String> cap_and_factor = withExpectedSize(20);
         for ( int i = 0; i < element_count; i++ ) {
             cap_and_factor.put( keys[i], vals[i] );
         }
         assertEquals( map, cap_and_factor );
 
-        TObjectIntHashMap<String> fully_specified =
-                new TObjectIntHashMap<String>( 20, 0.75f, Integer.MIN_VALUE );
+        TObjectIntMap<String> fully_specified = withExpectedSizeAndNoEntryValue(20, Integer.MIN_VALUE);
         for ( int i = 0; i < element_count; i++ ) {
             fully_specified.put( keys[i], vals[i] );
         }
         assertEquals( map, fully_specified );
 
-        TObjectIntHashMap<String> copy =
-                new TObjectIntHashMap<String>( fully_specified );
+        TObjectIntMap<String> copy = TKolobokeObjectIntHashMap.from(fully_specified);
         assertEquals( map, copy );
     }
 
@@ -95,7 +93,7 @@ public class TObjectPrimitiveHashMapTest extends TestCase {
         String[] keys = new String[element_count];
         int[] vals = new int[element_count];
 
-        TObjectIntMap<String> map = new TObjectIntHashMap<String>();
+        TObjectIntMap<String> map = withExpectedSize(10);
         for ( int i = 0; i < element_count; i++ ) {
             keys[i] = Integer.toString( i + 1 );
             vals[i] = i + 1;
@@ -121,7 +119,7 @@ public class TObjectPrimitiveHashMapTest extends TestCase {
         String[] keys = new String[element_count];
         int[] vals = new int[element_count];
 
-        TObjectIntMap<String> map = new TObjectIntHashMap<String>();
+        TObjectIntMap<String> map = withExpectedSize(10);
         for ( int i = 0; i < element_count; i++ ) {
             keys[i] = Integer.toString( i + 1 );
             vals[i] = i + 1;
@@ -140,7 +138,7 @@ public class TObjectPrimitiveHashMapTest extends TestCase {
 
 
     public void testPutIfAbsent() {
-        TObjectIntHashMap<String> map = new TObjectIntHashMap<String>();
+        TObjectIntMap<String> map = withExpectedSize(10);
 
         map.put( "One", 1 );
         map.put( "Two", 2 );
@@ -158,7 +156,7 @@ public class TObjectPrimitiveHashMapTest extends TestCase {
         String[] keys = new String[element_count];
         int[] vals = new int[element_count];
 
-        TObjectIntMap<String> map = new TObjectIntHashMap<String>();
+        TObjectIntMap<String> map = withExpectedSize(10);
         for ( int i = 0; i < element_count; i++ ) {
             keys[i] = Integer.toString( i + 1 );
             vals[i] = i + 1;
@@ -189,14 +187,14 @@ public class TObjectPrimitiveHashMapTest extends TestCase {
         String[] keys = new String[element_count];
         int[] vals = new int[element_count];
 
-        TObjectIntMap<String> control = new TObjectIntHashMap<String>();
+        TObjectIntMap<String> control = withExpectedSize(10);
         for ( int i = 0; i < element_count; i++ ) {
             keys[i] = Integer.toString( i + 1 );
             vals[i] = i + 1;
             control.put( keys[i], vals[i] );
         }
 
-        TObjectIntMap<String> map = new TObjectIntHashMap<String>();
+        TObjectIntMap<String> map = withExpectedSize(10);
 
         Map<String, Integer> source = new HashMap<String, Integer>();
         for ( int i = 0; i < element_count; i++ ) {
@@ -209,8 +207,8 @@ public class TObjectPrimitiveHashMapTest extends TestCase {
 
 
     public void testPutAll() throws Exception {
-        TObjectIntHashMap<String> t = new TObjectIntHashMap<String>();
-        TObjectIntHashMap<String> m = new TObjectIntHashMap<String>();
+        TObjectIntMap<String> t = withExpectedSize(10);
+        TObjectIntMap<String> m = withExpectedSize(10);
         m.put( "one", 2 );
         m.put( "two", 4 );
         m.put( "three", 6 );
@@ -229,7 +227,7 @@ public class TObjectPrimitiveHashMapTest extends TestCase {
         String[] keys = new String[element_count];
         int[] vals = new int[element_count];
 
-        TObjectIntMap<String> map = new TObjectIntHashMap<String>();
+        TObjectIntMap<String> map = withExpectedSize(10);
         for ( int i = 0; i < element_count; i++ ) {
             keys[i] = Integer.toString( i + 1 );
             vals[i] = i + 1;
@@ -251,7 +249,7 @@ public class TObjectPrimitiveHashMapTest extends TestCase {
         String[] keys = new String[element_count];
         int[] vals = new int[element_count];
 
-        TObjectIntMap<String> map = new TObjectIntHashMap<String>();
+        TObjectIntMap<String> map = withExpectedSize(10);
         for ( int i = 0; i < element_count; i++ ) {
             keys[i] = Integer.toString( i + 1 );
             vals[i] = i + 1;
@@ -325,7 +323,7 @@ public class TObjectPrimitiveHashMapTest extends TestCase {
         String[] keys = new String[element_count];
         int[] vals = new int[element_count];
 
-        TObjectIntMap<String> map = new TObjectIntHashMap<String>();
+        TObjectIntMap<String> map = withExpectedSize(10);
         for ( int i = 0; i < element_count; i++ ) {
             keys[i] = Integer.toString( i + 1 );
             vals[i] = i + 1;
@@ -364,7 +362,7 @@ public class TObjectPrimitiveHashMapTest extends TestCase {
         String[] keys = new String[element_count];
         int[] vals = new int[element_count];
 
-        TObjectIntMap<String> map = new TObjectIntHashMap<String>();
+        TObjectIntMap<String> map = withExpectedSize(10);
         for ( int i = 0; i < element_count; i++ ) {
             keys[i] = Integer.toString( i + 1 );
             vals[i] = i + 1;
@@ -412,8 +410,7 @@ public class TObjectPrimitiveHashMapTest extends TestCase {
         String[] keys = new String[element_count];
         int[] vals = new int[element_count];
 
-        TObjectIntMap<String> map =
-                new TObjectIntHashMap<String>( element_count, 0.5f, Integer.MIN_VALUE );
+        TObjectIntMap<String> map = withExpectedSizeAndNoEntryValue( element_count, Integer.MIN_VALUE );
         for ( int i = 0; i < element_count; i++ ) {
             keys[i] = Integer.toString( i + 1 );
             vals[i] = i + 1;
@@ -486,7 +483,7 @@ public class TObjectPrimitiveHashMapTest extends TestCase {
         String[] keys = new String[element_count];
         int[] vals = new int[element_count];
 
-        TObjectIntMap<String> map = new TObjectIntHashMap<String>();
+        TObjectIntMap<String> map = withExpectedSize(10);
         for ( int i = 0; i < element_count; i++ ) {
             keys[i] = Integer.toString( i + 1 );
             vals[i] = i + 1;
@@ -543,7 +540,7 @@ public class TObjectPrimitiveHashMapTest extends TestCase {
         String[] keys = new String[element_count];
         int[] vals = new int[element_count];
 
-        TObjectIntMap<String> map = new TObjectIntHashMap<String>();
+        TObjectIntMap<String> map = withExpectedSize(10);
         for ( int i = 0; i < element_count; i++ ) {
             keys[i] = Integer.toString( i + 1 );
             vals[i] = i + 1;
@@ -599,7 +596,7 @@ public class TObjectPrimitiveHashMapTest extends TestCase {
         String[] keys = new String[element_count];
         int[] vals = new int[element_count];
 
-        TObjectIntMap<String> map = new TObjectIntHashMap<String>();
+        TObjectIntMap<String> map = withExpectedSize(10);
         for ( int i = 0; i < element_count; i++ ) {
             keys[i] = Integer.toString( i + 1 );
             vals[i] = i + 1;
@@ -636,7 +633,7 @@ public class TObjectPrimitiveHashMapTest extends TestCase {
         String[] keys = new String[element_count];
         int[] vals = new int[element_count];
 
-        TObjectIntMap<String> map = new TObjectIntHashMap<String>();
+        TObjectIntMap<String> map = withExpectedSize(10);
         for ( int i = 0; i < element_count; i++ ) {
             keys[i] = Integer.toString( i + 1 );
             vals[i] = i + 1;
@@ -673,7 +670,7 @@ public class TObjectPrimitiveHashMapTest extends TestCase {
         String[] keys = new String[element_count];
         int[] vals = new int[element_count];
 
-        TObjectIntMap<String> map = new TObjectIntHashMap<String>();
+        TObjectIntMap<String> map = withExpectedSize(10);
         for ( int i = 0; i < element_count; i++ ) {
             keys[i] = Integer.toString( i + 1 );
             vals[i] = i + 1;
@@ -709,7 +706,7 @@ public class TObjectPrimitiveHashMapTest extends TestCase {
         String[] keys = new String[element_count];
         int[] vals = new int[element_count];
 
-        TObjectIntMap<String> map = new TObjectIntHashMap<String>();
+        TObjectIntMap<String> map = withExpectedSize(10);
         for ( int i = 0; i < element_count; i++ ) {
             keys[i] = Integer.toString( i + 1 );
             vals[i] = i + 1;
@@ -749,7 +746,7 @@ public class TObjectPrimitiveHashMapTest extends TestCase {
         String[] keys = new String[element_count];
         int[] vals = new int[element_count];
 
-        TObjectIntMap<String> map = new TObjectIntHashMap<String>();
+        TObjectIntMap<String> map = withExpectedSize(10);
         for ( int i = 0; i < element_count; i++ ) {
             keys[i] = Integer.toString( i + 1 );
             vals[i] = i + 1;
@@ -798,7 +795,7 @@ public class TObjectPrimitiveHashMapTest extends TestCase {
         String[] keys = new String[element_count];
         int[] vals = new int[element_count];
 
-        TObjectIntMap<String> map = new TObjectIntHashMap<String>();
+        TObjectIntMap<String> map = withExpectedSize(10);
         for ( int i = 0; i < element_count; i++ ) {
             keys[i] = Integer.toString( i + 1 );
             vals[i] = i + 1;
@@ -847,8 +844,7 @@ public class TObjectPrimitiveHashMapTest extends TestCase {
         String[] keys = new String[element_count];
         int[] vals = new int[element_count];
 
-        TObjectIntMap<String> map =
-                new TObjectIntHashMap<String>( element_count, 0.5f, Integer.MIN_VALUE );
+        TObjectIntMap<String> map = withExpectedSizeAndNoEntryValue( element_count, Integer.MIN_VALUE );
         for ( int i = 0; i < element_count; i++ ) {
             keys[i] = Integer.toString( i + 1 );
             vals[i] = i + 1;
@@ -892,7 +888,7 @@ public class TObjectPrimitiveHashMapTest extends TestCase {
 
 
     public void testIterator() {
-        TObjectIntHashMap<String> map = new TObjectIntHashMap<String>();
+        TObjectIntMap<String> map = withExpectedSize(10);
 
         TObjectIntIterator<String> iterator = map.iterator();
         assertFalse( iterator.hasNext() );
@@ -940,7 +936,7 @@ public class TObjectPrimitiveHashMapTest extends TestCase {
 
 
     public void testIteratorRemoval() {
-        TObjectIntHashMap<String> map = new TObjectIntHashMap<String>();
+        TObjectIntMap<String> map = withExpectedSize(10);
 
         map.put( "one", 1 );
         map.put( "two", 2 );
@@ -995,8 +991,7 @@ public class TObjectPrimitiveHashMapTest extends TestCase {
         int element_count = 10000;
         int remaining = element_count / 2;
 
-        TObjectIntHashMap<String> map =
-                new TObjectIntHashMap<String>( element_count, 0.5f, Integer.MIN_VALUE );
+        TObjectIntMap<String> map = withExpectedSizeAndNoEntryValue( element_count, Integer.MIN_VALUE );
 
         for ( int pass = 0; pass < 10; pass++ ) {
             Random r = new Random();
@@ -1018,8 +1013,7 @@ public class TObjectPrimitiveHashMapTest extends TestCase {
         String[] keys = new String[element_count];
         int[] vals = new int[element_count];
 
-        TObjectIntMap<String> map =
-                new TObjectIntHashMap<String>( element_count, 0.5f, Integer.MIN_VALUE );
+        TObjectIntMap<String> map = withExpectedSizeAndNoEntryValue( element_count, Integer.MIN_VALUE );
         for ( int i = 0; i < element_count; i++ ) {
             keys[i] = Integer.toString( i + 1 );
             vals[i] = i + 1;
@@ -1034,7 +1028,7 @@ public class TObjectPrimitiveHashMapTest extends TestCase {
 
 
     public void testAdjustValue() {
-        TObjectIntHashMap<String> map = new TObjectIntHashMap<String>();
+        TObjectIntMap<String> map = withExpectedSize(10);
 
         map.put( "one", 1 );
 
@@ -1057,7 +1051,7 @@ public class TObjectPrimitiveHashMapTest extends TestCase {
 
 
     public void testAdjustOrPutValue() {
-        TObjectIntHashMap<String> map = new TObjectIntHashMap<String>();
+        TObjectIntMap<String> map = withExpectedSize(10);
 
         map.put( "one", 1 );
 
@@ -1089,8 +1083,7 @@ public class TObjectPrimitiveHashMapTest extends TestCase {
         String[] keys = new String[element_count];
         int[] vals = new int[element_count];
 
-        TObjectIntMap<String> map =
-                new TObjectIntHashMap<String>( element_count, 0.5f, Integer.MIN_VALUE );
+        TObjectIntMap<String> map = withExpectedSizeAndNoEntryValue( element_count, Integer.MIN_VALUE );
         for ( int i = 0; i < element_count; i++ ) {
             keys[i] = Integer.toString( i + 1 );
             vals[i] = i + 1;
@@ -1155,8 +1148,7 @@ public class TObjectPrimitiveHashMapTest extends TestCase {
         String[] keys = new String[element_count];
         int[] vals = new int[element_count];
 
-        TObjectIntMap<String> map =
-                new TObjectIntHashMap<String>( element_count, 0.5f, Integer.MIN_VALUE );
+        TObjectIntMap<String> map = withExpectedSizeAndNoEntryValue( element_count, Integer.MIN_VALUE );
         for ( int i = 0; i < element_count; i++ ) {
             keys[i] = Integer.toString( i + 1 );
             vals[i] = i + 1;
@@ -1221,8 +1213,7 @@ public class TObjectPrimitiveHashMapTest extends TestCase {
         String[] keys = new String[element_count];
         int[] vals = new int[element_count];
 
-        TObjectIntMap<String> map =
-                new TObjectIntHashMap<String>( element_count, 0.5f, Integer.MIN_VALUE );
+        TObjectIntMap<String> map = withExpectedSizeAndNoEntryValue( element_count, Integer.MIN_VALUE );
         for ( int i = 0; i < element_count; i++ ) {
             keys[i] = Integer.toString( i + 1 );
             vals[i] = i + 1;
@@ -1232,7 +1223,7 @@ public class TObjectPrimitiveHashMapTest extends TestCase {
 
         class ForEach implements TObjectIntProcedure<String> {
 
-            TObjectIntMap<String> built = new TObjectIntHashMap<String>();
+            TObjectIntMap<String> built = withExpectedSize(10);
 
 
             public boolean execute( String key, int value ) {
@@ -1254,7 +1245,7 @@ public class TObjectPrimitiveHashMapTest extends TestCase {
 
         class ForEachFalse implements TObjectIntProcedure<String> {
 
-            TObjectIntMap<String> built = new TObjectIntHashMap<String>();
+            TObjectIntMap<String> built = withExpectedSize(10);
 
 
             public boolean execute( String key, int value ) {
@@ -1278,7 +1269,7 @@ public class TObjectPrimitiveHashMapTest extends TestCase {
 
 
     public void testRetain() {
-        TObjectIntHashMap<String> map = new TObjectIntHashMap<String>();
+        TObjectIntMap<String> map = withExpectedSize(10);
 
         map.put( "one", 1 );
         map.put( "two", 2 );
@@ -1366,8 +1357,7 @@ public class TObjectPrimitiveHashMapTest extends TestCase {
         String[] keys = new String[element_count];
         int[] vals = new int[element_count];
 
-        TObjectIntMap<String> map =
-                new TObjectIntHashMap<String>( element_count, 0.5f, Integer.MIN_VALUE );
+        TObjectIntMap<String> map = withExpectedSizeAndNoEntryValue( element_count, Integer.MIN_VALUE );
         for ( int i = 0; i < element_count; i++ ) {
             keys[i] = Integer.toString( i + 1 );
             vals[i] = i + 1;
@@ -1393,8 +1383,7 @@ public class TObjectPrimitiveHashMapTest extends TestCase {
         String[] keys = new String[element_count];
         int[] vals = new int[element_count];
 
-        TObjectIntMap<String> map =
-                new TObjectIntHashMap<String>( element_count, 0.5f, Integer.MIN_VALUE );
+        TObjectIntMap<String> map = withExpectedSizeAndNoEntryValue( element_count, Integer.MIN_VALUE );
         for ( int i = 0; i < element_count; i++ ) {
             keys[i] = Integer.toString( i + 1 );
             vals[i] = i + 1;
@@ -1402,8 +1391,7 @@ public class TObjectPrimitiveHashMapTest extends TestCase {
         }
         assertEquals( element_count, map.size() );
 
-        TObjectIntHashMap<String> fully_specified =
-                new TObjectIntHashMap<String>( 20, 0.75f, Integer.MIN_VALUE );
+        TObjectIntMap<String> fully_specified = withExpectedSizeAndNoEntryValue( 20, Integer.MIN_VALUE );
         for ( int i = 0; i < element_count; i++ ) {
             fully_specified.put( keys[i], vals[i] );
         }
@@ -1454,8 +1442,7 @@ public class TObjectPrimitiveHashMapTest extends TestCase {
         int[] vals = new int[element_count];
         int counter = 0;
 
-        TObjectIntMap<String> map =
-                new TObjectIntHashMap<String>( element_count, 0.5f, Integer.MIN_VALUE );
+        TObjectIntMap<String> map = withExpectedSizeAndNoEntryValue( element_count, Integer.MIN_VALUE );
         for ( int i = 0; i < element_count; i++, counter++ ) {
             keys[i] = Integer.toString( counter + 1 );
             vals[i] = counter + 1;
@@ -1471,8 +1458,7 @@ public class TObjectPrimitiveHashMapTest extends TestCase {
         assertSame( map, string_tmap_map.get( "first" ) );
         assertSame( map, string_tmap_map.get( "second" ) );
 
-        TObjectIntMap<String> map2 =
-                new TObjectIntHashMap<String>( element_count, 0.5f, Integer.MIN_VALUE );
+        TObjectIntMap<String> map2 = withExpectedSizeAndNoEntryValue( element_count, Integer.MIN_VALUE );
         for ( int i = 0; i < element_count; i++, counter++ ) {
             keys[i] = Integer.toString( counter + 1 );
             vals[i] = counter + 1;
@@ -1481,8 +1467,7 @@ public class TObjectPrimitiveHashMapTest extends TestCase {
         assertEquals( element_count, map2.size() );
         assertEquals( map2.hashCode(), map2.hashCode() );
 
-        TObjectIntMap<String> map3 =
-                new TObjectIntHashMap<String>( element_count, 0.5f, Integer.MIN_VALUE );
+        TObjectIntMap<String> map3 = withExpectedSizeAndNoEntryValue( element_count, Integer.MIN_VALUE );
         for ( int i = 0; i < element_count; i++, counter++ ) {
             keys[i] = Integer.toString( counter + 1 );
             vals[i] = counter + 1;
@@ -1506,12 +1491,15 @@ public class TObjectPrimitiveHashMapTest extends TestCase {
     }
 
 
+    /**
+     * Koloboke Compile doesn't support serialization yet
+     */
     @SuppressWarnings({"unchecked"})
-    public void testSerialize() throws Exception {
+    public void ignoreTestSerialize() throws Exception {
         Integer[] keys = {1138, 42, 86, 99, 101, 727, 117};
         int[] vals = new int[keys.length];
 
-        TObjectIntMap<Integer> map = new TObjectIntHashMap<Integer>();
+        TObjectIntMap<Integer> map = withExpectedSize(10);
         for ( int i = 0; i < keys.length; i++ ) {
             vals[i] = keys[i] * 2;
             map.put( keys[i], vals[i] );
@@ -1531,7 +1519,7 @@ public class TObjectPrimitiveHashMapTest extends TestCase {
 
 
     public void testToString() {
-        TObjectIntHashMap<String> m = new TObjectIntHashMap<String>();
+        TObjectIntMap<String> m = withExpectedSize(10);
         m.put( "One", 11 );
         m.put( "Two", 22 );
 
@@ -1542,7 +1530,7 @@ public class TObjectPrimitiveHashMapTest extends TestCase {
 
 
     public void testDecorator() {
-//        TObjectIntHashMap<String> map = new TObjectIntHashMap<String>();
+//        TObjectIntHashMap<String> map = TKolobokeObjectIntHashMap.withExpectedSize(10);
 //
 //        map.put( "one", 1 );
 //        map.put( "two", 2 );
@@ -1565,20 +1553,4 @@ public class TObjectPrimitiveHashMapTest extends TestCase {
 //
 //        assertSame(map, ( ( TObjectIntHashMapDecorator ) decorator ).getMap() );
     }
-
-
-	public void testBug3232758() {
-		TObjectIntHashMap<String> map = new TObjectIntHashMap<String>( 1, 3 );
-		map.put( "1009", 0 );
-		map.put( "1007", 1 );
-		map.put( "1006", 2 );
-		map.put( "1005", 3 );
-		map.put( "1004", 4 );
-		map.put( "1002", 5 );
-		map.put( "1001", 6 );
-
-		for ( Object o : map.keys() ) {
-			map.remove( o );
-		}
-	}
 }

@@ -1,0 +1,549 @@
+///////////////////////////////////////////////////////////////////////////////
+// Copyright (c) 2016 Roman Leventov
+//
+// This library is free software; you can redistribute it and/or
+// modify it under the terms of the GNU Lesser General Public
+// License as published by the Free Software Foundation; either
+// version 2.1 of the License, or (at your option) any later version.
+//
+// This library is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU Lesser General Public
+// License along with this program; if not, write to the Free Software
+// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+///////////////////////////////////////////////////////////////////////////////
+
+package gnu.trove.map.hash;
+
+import com.koloboke.collect.*;
+import com.koloboke.collect.set.ObjSet;
+import com.koloboke.compile.*;
+import com.koloboke.function.*;
+import gnu.trove.T#E#Collection;
+import gnu.trove.function.T#E#Function;
+import gnu.trove.iterator.T#E#Iterator;
+import gnu.trove.iterator.TObject#E#Iterator;
+import gnu.trove.map.TObject#E#Map;
+import gnu.trove.procedure.*;
+
+import java.util.*;
+
+
+//////////////////////////////////////////////////
+// THIS IS A GENERATED CLASS. DO NOT HAND EDIT! //
+//////////////////////////////////////////////////
+
+
+/**
+ * Koloboke Compile-generated implementation of TObject#E#Map
+ * @author Roman Leventov
+ */
+@KolobokeMap
+@NullKeyAllowed
+public abstract class TKolobokeObject#E#HashMap<K> implements TObject#E#Map<K> {
+
+    public static <K> TObject#E#Map<K> withExpectedSize(int expectedSize) {
+        return new KolobokeTKolobokeObject#E#HashMap<K>((#e#) 0, expectedSize);
+    }
+
+    public static <K> TObject#E#Map<K> withExpectedSizeAndNoEntryValue(
+            int expectedSize, #e# noEntryValue) {
+        return new KolobokeTKolobokeObject#E#HashMap<K>(noEntryValue, expectedSize);
+    }
+
+    public static <K> TObject#E#Map<K> from(TObject#E#Map<? extends K> map) {
+        TObject#E#Map<K> result = new KolobokeTKolobokeObject#E#HashMap<K>(map.getNoEntryValue(), map.size());
+        result.putAll(map);
+        return result;
+    }
+
+    private final #e# noEntryValue;
+
+    TKolobokeObject#E#HashMap(#e# noEntryValue) {
+        this.noEntryValue = noEntryValue;
+    }
+
+    @Override
+    public final #e# getNoEntryValue() {
+        return noEntryValue;
+    }
+
+    final #e# defaultValue() {
+        return noEntryValue;
+    }
+
+    abstract #e# get#E#(Object key);
+
+    @Override
+    public final #e# get(Object key) {
+        return get#E#(key);
+    }
+
+    abstract #e# removeAs#E#(Object key);
+
+    @Override
+    public final #e# remove(Object key) {
+        return removeAs#E#(key);
+    }
+
+    abstract void justPut(K key, #e# value);
+
+    @Override
+    public final void putAll(TObject#E#Map<? extends K> map) {
+        map.forEachEntry(new TObject#E#Procedure<K>() {
+            @Override
+            public boolean execute(K key, #e# value) {
+                justPut(key, value);
+                return true;
+            }
+        });
+    }
+
+    /**
+     * Koloboke key set's iterator, defined in the implementation class,
+     * clashes with Trove's iterator, so we should rename Koloboke's
+     * iterator
+     */
+    @MethodForm("iterator")
+    abstract ObjIterator<K> keySetIterator();
+
+    @Override
+    public abstract ObjSet<K> keySet();
+
+    @Override
+    public final Object[] keys() {
+        return keySet().toArray();
+    }
+
+    @Override
+    public final K[] keys(K[] array) {
+        return keySet().toArray(array);
+    }
+
+    @MethodForm("values")
+    abstract #E#Collection kolobokeValues();
+
+    class ValueCollection implements T#E#Collection {
+        final #E#Collection values = kolobokeValues();
+
+        @Override
+        public #e# getNoEntryValue() {
+            return noEntryValue;
+        }
+
+        @Override
+        public int size() {
+            return values.size();
+        }
+
+        @Override
+        public boolean isEmpty() {
+            return values.isEmpty();
+        }
+
+        @Override
+        public boolean contains(#e# entry) {
+            return values.contains(entry);
+        }
+
+        @Override
+        public T#E#Iterator iterator() {
+            final #E#Iterator it = values.iterator();
+            return new T#E#Iterator() {
+                @Override
+                public #e# next() {
+                    return it.next#E#();
+                }
+
+                @Override
+                public boolean hasNext() {
+                    return it.hasNext();
+                }
+
+                @Override
+                public void remove() {
+                    it.remove();
+                }
+            };
+        }
+
+        @Override
+        public #e#[] toArray() {
+            return values.to#E#Array();
+        }
+
+        @Override
+        public #e#[] toArray(#e#[] destination) {
+            #e#[] result = values.toArray(destination);
+            // Unlike Trove, Koloboke sets last element after the last to 0 always
+            // regardless noEntryValue, so should re-set manually
+            if (result.length > size())
+                result[size()] = getNoEntryValue();
+            return result;
+        }
+
+        @Override
+        public boolean add(#e# entry) {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public boolean remove(#e# entry) {
+            return values.remove#E#(entry);
+        }
+
+        @Override
+        public boolean containsAll(Collection<?> collection) {
+            try {
+                return values.containsAll(collection);
+            } catch (ClassCastException e) {
+                return false;
+            }
+        }
+
+        @Override
+        public boolean containsAll(T#E#Collection collection) {
+            for (T#E#Iterator it = collection.iterator(); it.hasNext();) {
+                if (!values.contains(it.next()))
+                    return false;
+            }
+            return true;
+        }
+
+        @Override
+        public boolean containsAll(#e#[] array) {
+            for (#e# e : array) {
+                if (!values.contains(e))
+                    return false;
+            }
+            return true;
+        }
+
+        @Override
+        public boolean addAll(Collection<? extends #ET#> collection) {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public boolean addAll(T#E#Collection collection) {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public boolean addAll(#e#[] array) {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public boolean retainAll(Collection<?> collection) {
+            return values.retainAll(collection);
+        }
+
+        @Override
+        public boolean retainAll(final T#E#Collection collection) {
+            return values.removeIf(new #E#Predicate() {
+                @Override
+                public boolean test(#e# value) {
+                    return !collection.contains(value);
+                }
+            });
+        }
+
+        @Override
+        public boolean retainAll(final #e#[] array) {
+            // This is how trove implements this method itself
+            Arrays.sort(array);
+            return values.removeIf(new #E#Predicate() {
+                @Override
+                public boolean test(#e# value) {
+                    return Arrays.binarySearch(array, value) < 0;
+                }
+            });
+        }
+
+        @Override
+        public boolean removeAll(Collection<?> collection) {
+            return values.removeAll(collection);
+        }
+
+        @Override
+        public boolean removeAll(final T#E#Collection collection) {
+            return values.removeIf(new #E#Predicate() {
+                @Override
+                public boolean test(#e# value) {
+                    return collection.contains(value);
+                }
+            });
+        }
+
+        @Override
+        public boolean removeAll(#e#[] array) {
+            // This is how trove implements this method itself, though it is has
+            // quadratic complexity
+            boolean changed = false;
+            for (final #e# e : array) {
+                changed |= values.removeIf(new #E#Predicate() {
+                    @Override
+                    public boolean test(#e# value) {
+                        return value == e;
+                    }
+                });
+            }
+            return changed;
+        }
+
+        @Override
+        public void clear() {
+            values.clear();
+        }
+
+        @Override
+        public boolean forEach(final T#E#Procedure procedure) {
+            return values.forEachWhile(new #E#Predicate() {
+                @Override
+                public boolean test(#e# value) {
+                    return procedure.execute(value);
+                }
+            });
+        }
+
+        @Override
+        public String toString() {
+            final StringBuilder sb = new StringBuilder().append('{');
+            values.forEach(new #E#Consumer() {
+                @Override
+                public void accept(#e# value) {
+                    sb.append(value).append(',').append(' ');
+                }
+            });
+            sb.setLength(sb.length() - 2);
+            sb.append('}');
+            return sb.toString();
+        }
+    }
+
+    private ValueCollection valueCollection;
+
+    @Override
+    public final T#E#Collection valueCollection() {
+        return valueCollection != null ? valueCollection : (valueCollection = new ValueCollection());
+    }
+
+    @Override
+    public final #e#[] values() {
+        return kolobokeValues().to#E#Array();
+    }
+
+    @Override
+    public final #e#[] values(#e#[] array) {
+        return valueCollection().toArray(array);
+    }
+
+    abstract Set<Map.Entry<K, #ET#>> entrySet();
+
+    @Override
+    public final TObject#E#Iterator<K> iterator() {
+        final Iterator<Map.Entry<K, #ET#>> iterator = entrySet().iterator();
+        return new TObject#E#Iterator<K>() {
+            private Map.Entry<K, #ET#> entry;
+
+            @Override
+            public K key() {
+                return entry.getKey();
+            }
+
+            @Override
+            public #e# value() {
+                return entry.getValue();
+            }
+
+            @Override
+            public #e# setValue(#e# val) {
+                return entry.setValue(val);
+            }
+
+            @Override
+            public void advance() {
+                entry = iterator.next();
+            }
+
+            @Override
+            public boolean hasNext() {
+                return iterator.hasNext();
+            }
+
+            @Override
+            public void remove() {
+                iterator.remove();
+            }
+        };
+    }
+
+    abstract #e# computeIfPresent(K key, Obj#E#To#E#Function<? super K> remappingFunction);
+
+    static class IncrementFunction<K> implements Obj#E#To#E#Function<K> {
+        public boolean incremented = false;
+
+        @Override
+        public #e# applyAs#E#(K key, #e# value) {
+            incremented = true;
+            return (#e#) (value + 1);
+        }
+    }
+
+    @Override
+    public final boolean increment(K key) {
+        IncrementFunction<K> incrementFunction = new IncrementFunction<K>();
+        computeIfPresent(key, incrementFunction);
+        return incrementFunction.incremented;
+    }
+
+    static class AdjustmentFunction<K> implements Obj#E#To#E#Function<K> {
+        final #e# adjustment;
+        public boolean adjusted = false;
+
+        AdjustmentFunction(#e# adjustment) {
+            this.adjustment = adjustment;
+        }
+
+        @Override
+        public #e# applyAs#E#(K key, #e# value) {
+            adjusted = true;
+            return (#e#) (value + adjustment);
+        }
+    }
+
+    @Override
+    public final boolean adjustValue(K key, #e# amount) {
+        AdjustmentFunction<K> adjustmentFunction = new AdjustmentFunction<K>(amount);
+        computeIfPresent(key, adjustmentFunction);
+        return adjustmentFunction.adjusted;
+    }
+
+    abstract #e# merge(K key, #e# value, #E#BinaryOperator remappingFunction);
+
+    @Override
+    public final #e# adjustOrPutValue(K key, final #e# adjustAmount, #e# putAmount) {
+        return merge(key, putAmount, new #E#BinaryOperator() {
+            @Override
+            public #e# applyAs#E#(#e# valueInMap, #e# putAmount) {
+                return (#e#) (valueInMap + adjustAmount);
+            }
+        });
+    }
+
+    @Override
+    public final boolean forEachKey(final TObjectProcedure<? super K> procedure) {
+        return keySet().forEachWhile(new Predicate<K>() {
+            @Override
+            public boolean test(K key) {
+                return procedure.execute(key);
+            }
+        });
+    }
+
+    @Override
+    public final boolean forEachValue(final T#E#Procedure procedure) {
+        return kolobokeValues().forEachWhile(new #E#Predicate() {
+            @Override
+            public boolean test(#e# value) {
+                return procedure.execute(value);
+            }
+        });
+    }
+
+    abstract boolean forEachWhile(Obj#E#Predicate<? super K> predicate);
+
+    @Override
+    public final boolean forEachEntry(final TObject#E#Procedure<? super K> procedure) {
+        return forEachWhile(new Obj#E#Predicate<K>() {
+            @Override
+            public boolean test(K key, #e# value) {
+                return procedure.execute(key, value);
+            }
+        });
+    }
+
+    abstract void replaceAll(Obj#E#To#E#Function<? super K> function);
+
+    @Override
+    public final void transformValues(final T#E#Function function) {
+        replaceAll(new Obj#E#To#E#Function<K>() {
+            @Override
+            public #e# applyAs#E#(K key, #e# value) {
+                return function.execute(value);
+            }
+        });
+    }
+
+    abstract boolean removeIf(Obj#E#Predicate<? super K> predicate);
+
+    @Override
+    public final boolean retainEntries(final TObject#E#Procedure<? super K> procedure) {
+        return removeIf(new Obj#E#Predicate<K>() {
+            @Override
+            public boolean test(K key, #e# value) {
+                return !procedure.execute(key, value);
+            }
+        });
+    }
+
+    abstract boolean containsEntry(Object key, #e# value);
+
+    @Override
+    public final boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (!(obj instanceof TObject#E#Map)) {
+            return false;
+        }
+        TObject#E#Map that = (TObject#E#Map) obj;
+        if (that.size() != this.size()) {
+            return false;
+        }
+        try {
+            TObject#E#Iterator iter = that.iterator();
+            while (iter.hasNext()) {
+                iter.advance();
+                Object key = iter.key();
+                #e# value = iter.value();
+                if (!containsEntry(key, value))
+                    return false;
+            }
+        } catch (ClassCastException e) {
+            return false;
+        } catch (NullPointerException e) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Need to override abstract explicitly because otherwise Koloboke Compile won't generate implementation, because
+     * this abstract class doesn't inherit from java.util.Map.
+     */
+    @Override
+    public abstract int hashCode();
+
+    abstract void forEach(Obj#E#Consumer<? super K> action);
+
+    /**
+     * Have to override this just because Trove doesn't insert space between entries!
+     */
+    @Override
+    public final String toString() {
+        final StringBuilder sb = new StringBuilder().append('{');
+        forEach(new Obj#E#Consumer<K>() {
+            @Override
+            public void accept(K key, #e# value) {
+                sb.append(key != this ? (key != null ? key.toString() : "null") : "(this Map)");
+                sb.append('=').append(value).append(',');
+            }
+        });
+        sb.setCharAt(sb.length() - 1, '}');
+        return sb.toString();
+    }
+}

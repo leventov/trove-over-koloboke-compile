@@ -5,6 +5,8 @@ jar {
 
 dependencies {
     compile project( ':generator' )
+    provided 'com.koloboke:koloboke-compile:0.5'
+    compile 'com.koloboke:koloboke-impl-common-jdk6-7:1.0.0'
 }
 
 

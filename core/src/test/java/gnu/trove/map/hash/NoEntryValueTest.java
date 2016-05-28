@@ -11,7 +11,7 @@ import java.util.Arrays;
  */
 public class NoEntryValueTest extends TestCase {
 	public void testAdjustToNoEntry() {
-		TObjectIntMap<String> map = new TObjectIntHashMap<String>();
+		TObjectIntMap<String> map = TKolobokeObjectIntHashMap.withExpectedSize(10);
 		
 		assertEquals( 0, map.getNoEntryValue() );
 		assertEquals( 0, map.get( "NotInThere" ) );
